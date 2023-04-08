@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  
+<head>
+  <meta charset="UTF-8">
+  <title>LAOLE- MediaCapture and Streams API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="main.css">
+  <link rel="shortcut icon" href="#">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <style>
+    p {
+      border: 2px solid powderblue;
+      padding: 30px;
+    }
+
+    .button {
+      background-color: #4CAF50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button1 {
+      background-color: #f44336; /* Red */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    .button2 {
+      background-color: #366cf4; /* Soft Blue */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+
+    </style>
+	<title>Geolocation Example</title>
+</head>
+<body>
+	<p>Latitude: <span id="latitude"></span></p>
+	<p>Longitude: <span id="longitude"></span></p>
+
+	<script src="/scripts/geo.js"></script>
+  <script src="/scripts/vid.js"></script>
+  <button class="button" id="btnStart">START RECORDING</button><br/>         
+     <button class="button1" id="btnStop">STOP RECORDING</button>
+    
+    <video controls muted style="width:100%;"></video>
+        <video id="vid2" controls></video>
+  
+
+
+</body>
+</html>

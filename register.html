@@ -9,6 +9,10 @@
     <link rel="shortcut icon" href="#">
 
 	<style>
+		body {
+			background-color: <desired color>;
+		  }
+		
 		.container {
 			display: flex;
 			justify-content: center;
@@ -16,6 +20,7 @@
 			height: 100%;
 			max-width: 800px; /* Set the maximum width to 800px */
   			margin: 0 auto; /* Center the container horizontally */
+			background-color: transparent;
 		  }
 		  
 		  #register-form {
@@ -89,16 +94,16 @@
 						<input type="text" id="last-name" name="last-name" required>
 					</div>
 					<div class="form-group">
-						<label for="city">City</label>
-						<input type="text" id="city" name="city" required>
+						<label for="city-register">City</label>
+						<input type="text" id="city-register" name="city-register" required>
 					</div>
 					<div class="form-group">
-						<label for="state">State</label>
-						<input type="text" id="state" name="state" required>
+						<label for="state-register">State</label>
+						<input type="text" id="state-register" name="state-register" required>
 					</div>
 					<div class="form-group">
-						<label for="cell-phone">Cell Phone</label>
-						<input type="text" id="cell-phone" name="cell-phone" required>
+						<label for="cell-register">Cell Phone</label>
+						<input type="text" id="cell-register" name="cell-register" required>
 					</div>
 					<div class="form-group">
 						<label for="user-type">User Type</label>
@@ -109,8 +114,8 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="email">Email</label>
-						<input type="email" id="email-register" name="email" required>
+						<label for="email-register">Email</label>
+						<input type="email-register" id="email-register" name="email-register" required>
 					</div>
 					<div class="form-group">
 						<label for="password">Password</label>
@@ -122,14 +127,19 @@
 					</div>
 					<button type="submit">Submit</button>
 				</fieldset>
-				<center>
-					<a href="login.html">Login</a>
-				  </center>
+				<div>
+				<center><a href="login.html">Login</a></center>
+				</div>
+				<div><center><a href="index.html">Home</a></center>
+				</div>
+				<div><center><a href="legal.html">Terms and Agreement</a></center>
+				</div>
+
 				</form>
 				
 			</div>
 		</div>
 	</div>
-	<script src="app.js"></script>
+	<script src="register.js"></script>
 </body>
 </html>

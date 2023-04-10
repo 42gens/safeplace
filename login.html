@@ -7,33 +7,41 @@
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="shortcut icon" href="#">
     <style>
+      
+      body {
+        background-color: white;
+      }
+      
+      form,
+      fieldset {
+        background-color: #fff; /* Replace #fff with the original background color */
+      }
+      
       .container {
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100vh;
-		margin-top: 10px; /* Adjust the value as needed */
+        margin-top: 10px; /* Adjust the value as needed */
       }
-
-	  
-
+      
       form {
         width: 400px;
-			padding: 20px;
-			border: 1px solid #ccc;
-			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-			font-family: Arial, sans-serif;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        font-family: Arial, sans-serif;
       }
-
+      
       fieldset legend {
         border: none;
-		font-size: 24px;
+        font-size: 24px;
         margin: 0;
         padding: 0;
-		color: #4CAF50;
+        color: #4CAF50;
       }
-
+      
       input[type="text"],
       input[type="email"],
       input[type="password"] {
@@ -46,7 +54,7 @@
         font-size: 16px;
         box-sizing: border-box;
       }
-
+      
       button[type="submit"] {
         display: block;
         width: 100%;
@@ -58,23 +66,24 @@
         font-size: 16px;
         cursor: pointer;
       }
-
+      
       button[type="submit"]:hover {
         background-color: #4CAF50;
       }
-
+      
       label {
         display: block;
         margin-bottom: 10px;
         font-size: 16px;
-		
       }
-
+      
       .error {
         color: red;
         font-size: 14px;
         margin-top: 10px;
       }
+      
+      
     </style>
   </head>
   <body>
@@ -83,8 +92,8 @@
         <fieldset>
           <legend>Login</legend>
           <div>
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email-login">Email</label>
+            <input type="text" id="email-login" name="email" required>
           </div>
           <div>
             <label for="password">Password</label>
@@ -92,12 +101,15 @@
           </div>
           <button type="submit">Login</button>
         </fieldset>
-		    <center>
-          <a href="register.html">Register</a>
-        </center>
+		    <div>
+          <center><a href="register.html">Register</a></center>
+          </div>
+          <div>
+            <center><a href="index.html">Home</a></center>
+          </div>
       </form>
 	  
     </div>
-    <script src="app.js"></script>
+    <script src="login.js"></script>
   </body>
 </html>

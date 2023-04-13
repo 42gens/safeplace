@@ -20,29 +20,27 @@ loginForm.addEventListener('submit', (event) => {
 	const url = 'http://172.127.98.121:10000/login';
 	fetch(url, {
 		method: 'POST',
-		//headers: {
-		//	'Content-Type': 'application/json',
-        //    'Access-Control-Allow-Origin':'*'
-		//},
 		body: JSON.stringify(data)
 	})
-    .then((response) => response.json())
-    .then((data) => {
-        //??Remove console.log(data) below after testing
-		console.log(data)
-        if (data.Code ==='0') {
-            // login success
-            if (data.UserType === 'client') {
-                window.location.href = 'client_v1.html';
-            } else {
-                window.location.href = 'index.html';
-            }
-        } else {
-            // login failed
-            alert('Invalid email or password');
-        }
-    })
-    .catch((error) => console.error(error));
-    
+	.then((response) => response.json())
+	.then((data) => {
+		console.log(data);
+		if (data.Code ==='0') {
+			// login success
+			if (data.UserType === 'client') {
+				// store the returned data in the userData variable
+				let userData = data;
+				// save the data to the local storage
+				localStorage.setItem('userData', JSON.stringify(userData));
+				// redirect to the client_v1.html page
+				window.location.href = 'client_v1.html';
+			} else {
+				window.location.href = 'index.html';
+			}
+		} else {
+			// login failed
+			alert('Invalid email or password');
+		}
+	})
+	.catch((error) => console.error(error));
 });
-

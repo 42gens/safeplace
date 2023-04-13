@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-  
 <head>
   <meta charset="UTF-8">
   <title>LAOLE- MediaCapture and Streams API</title>
@@ -57,22 +56,44 @@
       cursor: pointer;
     }
 
-    </style>
-	<title>Geolocation Example</title>
+    header {
+      background-color: #eee;
+      padding: 20px;
+      text-align: center;
+    }
+  </style>
+
+  <title>Geolocation</title>
 </head>
+
 <body>
-	<p>Latitude: <span id="latitude"></span></p>
-	<p>Longitude: <span id="longitude"></span></p>
+  <header>
+    <h1>Welcome, <span id="user-name"></span>!</h1>
+    <h2><a href="client_profile.html">MyProfile</a></h2>
+  </header>
 
-	<script src="/scripts/geo.js"></script>
-  <script src="/scripts/vid.js"></script>
+  <p>Latitude: <span id="latitude"></span></p>
+  <p>Longitude: <span id="longitude"></span></p>
+
+
+
   <button class="button" id="btnStart">START RECORDING</button><br/>         
-     <button class="button1" id="btnStop">STOP RECORDING</button>
+  <button class="button1" id="btnStop">STOP RECORDING</button>
     
-    <video controls muted style="width:100%;"></video>
-        <video id="vid2" controls></video>
+  <video controls muted style="width:100%;"></video>
+  <video id="vid2" controls></video>
+
+  <script src="/scripts/geo.js"></script>
+  <script src="/scripts/vid.js"></script>
+
   
-
-
+<script>
+  // client_v1.html page
+	const userData = JSON.parse(localStorage.getItem('userData'));
+	const userName = document.getElementById('user-name');
+	if (userData) {
+		userName.textContent = `${userData.Firstname} ${userData.Lastname}`;
+	}
+</script>
 </body>
 </html>

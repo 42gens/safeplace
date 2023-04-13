@@ -1,23 +1,165 @@
 <!DOCTYPE html>
 <html>
-  
-<head>
-  <meta charset="UTF-8">
-  <title>LAOLE- Profile- MediaCapture and Streams API</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="#">
-   
-	<title>User Profile</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8">
+    <title>LAOLE- Profile- MediaCapture and Streams API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    
+    <link rel="shortcut icon" href="#">
+    <style>
+      /* Style the body element */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
 
+      /* Style the header element */
+      h1 {
+        font-size: 2.5rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+
+      /* Style the container element */
+      .profile-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,.1);
+        padding: 1.5rem;
+        margin: 1.5rem auto;
+        max-width: 600px;
+      }
+
+      /* Style the paragraphs inside the container element */
+      .profile-container p {
+        margin: 0.5rem 0;
+        font-size: 1.1rem;
+      }
+
+      /* Style the error message */
+      .error-message {
+        color: red;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 1.5rem;
+      }
+    </style>
+  </head>
+  <body>
     <div>
-        <h1>User Profile</h1>
-        <p>Name: <span id="name"></span></p>
+      <h1>My Profile</h1>
+      <h2><a href="client_v1.html">Main</a></h2>      
+      <div id="profile-data"></div>
     </div>
-  
+    
 
+    <script>
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      const profileData = document.getElementById('profile-data');
 
-</body>
-</html>
+      if (userData) {
+        const profileContainer = document.createElement('div');
+        profileContainer.classList.add('profile-container');
+        profileData.appendChild(profileContainer);
+
+        const dataArr = [
+          { name: 'Id', value: userData.Id, editable: false },
+          { name: 'Email', value: userData.Email, editable: false },
+          { name: 'Password', value: userData.Password, editable: true },
+          { name: 'Firstname', value: userData.Firstname, editable: true },
+          { name: 'Lastname', value: userData.Lastname, editable: true },
+          { name: 'City', value: userData.City, editable: true },
+          { name: 'State', value: userData.State, editable: true },
+          { name: 'Mobile', value: userData.Mobile, editable: true },
+          { name: 'E1name', value: userData.E1name, editable: true },
+          { name: 'E1phone', value: userData.E1phone, editable: true },
+          { name: 'E1email', value: userData.E1email, editable: true },
+          { name: 'E1notifyMinutes', value: userData.E1notifyMinutes, editable: true },
+          { name: 'E2name', value: userData.E2name, editable: true },
+          { name: 'E2phone', value: userData.E2phone, editable: true },
+          { name: 'E2email', value: userData.E2email, editable: true },
+          { name: 'E2notifyMinutes', value: userData.E2notifyMinutes, editable: true },
+          { name: 'UserType', value: userData.UserType, editable: false },
+          { name: 'Age', value: userData.Age, editable: false },
+          { name: 'Email', value: userData.Email, editable: false },
+          { name: 'Phone', value: userData.Phone, editable: false },
+          { name: 'Address', value: userData.Address, editable: false }
+          ];
+          
+          // Loop through the data array and create table rows
+          for (var i = 0; i < dataArr.length; i++) {
+            var row = $('<tr>');
+            var nameCell = $('<td>').text(dataArr[i].name);
+            var valueCell = $('<td>').text(dataArr[i].value);
+            var editCell = $('<td>');
+            
+            // Create an edit button for editable fields
+            if (dataArr[i].editable) {
+              var editBtn = $('<button>').text('Edit').addClass('edit-btn');
+              editCell.append(editBtn);
+            }
+            
+            row.append(nameCell, valueCell, editCell);
+            //$('#user-table').append(row);
+            profileContainer.appendChild(row[0]);
+          }
+          
+          // Add click event listener to edit buttons
+          $('.edit-btn').on('click', function() {
+            // Get the row element of the clicked edit button
+            var row = $(this).closest('tr');
+            
+            // Get the value of the name and value cells of the row
+            var name = row.find('td:nth-child(1)').text();
+            var value = row.find('td:nth-child(2)').text();
+            
+            // Replace the value cell with an input element
+            var input = $('<input>').val(value);
+            var valueCell = $('<td>').append(input);
+            row.find('td:nth-child(2)').replaceWith(valueCell);
+            
+            // Replace the edit button with a save button
+            var saveBtn = $('<button>').text('Save').addClass('save-btn');
+            row.find('.edit-btn').replaceWith(saveBtn);
+          });
+          
+          // Add click event listener to save buttons
+          // Add click event listener to save buttons
+          profileContainer.addEventListener('click', function(event) {
+            if (event.target && event.target.matches('.save-btn')) {
+              // Get the row element of the clicked save button
+              var row = $(event.target).closest('tr');
+              
+              // Get the value of the input element in the row
+              var value = row.find('input').val();
+              
+              // Replace the input element with a text element
+              var valueCell = $('<td>').text(value);
+              row.find('td:nth-child(2)').replaceWith(valueCell);
+              
+              // Replace the save button with an edit button
+              var editBtn = $('<button>').text('Edit').addClass('edit-btn');
+              row.find('.save-btn').replaceWith(editBtn);
+            }
+          });
+
+        }
+          </script>
+          
+
+    </body>
+    </html>

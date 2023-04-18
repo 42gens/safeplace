@@ -5,9 +5,6 @@
     <title>LAOLE- Profile- MediaCapture and Streams API</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <meta http-equiv="Permissions-Policy" content="interest-cohort=()">    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
     
     <link rel="shortcut icon" href="#">
     <style>
@@ -23,13 +20,6 @@
       /* Style the header element */
       h1 {
         font-size: 2.5rem;
-        margin-top: 1.5rem;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-
-      h2 {
-        font-size: 1.5rem;
         margin-top: 1.5rem;
         margin-bottom: 1rem;
         text-align: center;
@@ -58,34 +48,55 @@
         text-align: center;
         margin-top: 1.5rem;
       }
+
+      button[type="submit"] {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4CAF50;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      button[type="submit"]:hover {
+        background-color: #4CAF50;
+      }
     </style>
   </head>
   <body>
     <div>
-      <h1>My Profile</h1>
-      <h2><a href="client_v1.html">Main</a></h2>      
-      <div id="profile-data"></div>
+      <form id="profile-form">
+        <h1>My Profile</h1>
+        <div id="profile-data"></div>
+        <button type="submit">Save Changes</button>
+      </form>
+      
     </div>
-    
-
     <script>
-      const userData = JSON.parse(localStorage.getItem('userData'));
-      const profileData = document.getElementById('profile-data');
-
+      
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const profileData = document.getElementById("profile-data");
+      
+      console.log("Before creating profileContainer");
+      console.log(userData);
+      
       if (userData) {
         const profileContainer = document.createElement('div');
         profileContainer.classList.add('profile-container');
         profileData.appendChild(profileContainer);
-
+      
         const dataArr = [
           { name: 'Id', value: userData.Id, editable: false },
           { name: 'Email', value: userData.Email, editable: false },
           { name: 'Password', value: userData.Password, editable: true },
-          { name: 'Firstname', value: userData.Firstname, editable: true },
-          { name: 'Lastname', value: userData.Lastname, editable: true },
+          { name: 'Firstname', value: userData.Firstname, editable: false },
+          { name: 'Lastname', value: userData.Lastname, editable: false },
           { name: 'City', value: userData.City, editable: true },
           { name: 'State', value: userData.State, editable: true },
-          { name: 'Mobile', value: userData.Mobile, editable: true },
+          { name: 'Mobile', value: userData.Mobile, editable: false },
           { name: 'E1name', value: userData.E1name, editable: true },
           { name: 'E1phone', value: userData.E1phone, editable: true },
           { name: 'E1email', value: userData.E1email, editable: true },
@@ -95,72 +106,73 @@
           { name: 'E2email', value: userData.E2email, editable: true },
           { name: 'E2notifyMinutes', value: userData.E2notifyMinutes, editable: true },
           { name: 'UserType', value: userData.UserType, editable: false },
-          { name: 'Age', value: userData.Age, editable: false },
-          { name: 'Email', value: userData.Email, editable: false },
-          { name: 'Phone', value: userData.Phone, editable: false },
-          { name: 'Address', value: userData.Address, editable: false }
-          ];
-          
-          // Loop through the data array and create table rows
-          for (var i = 0; i < dataArr.length; i++) {
-            var row = $('<tr>');
-            var nameCell = $('<td>').text(dataArr[i].name);
-            var valueCell = $('<td>').text(dataArr[i].value);
-            var editCell = $('<td>');
-            
-            // Create an edit button for editable fields
-            if (dataArr[i].editable) {
-              var editBtn = $('<button>').text('Edit').addClass('edit-btn');
-              editCell.append(editBtn);
-            }
-            
-            row.append(nameCell, valueCell, editCell);
-            //$('#user-table').append(row);
-            profileContainer.appendChild(row[0]);
+          { name: 'Created', value: userData.Created, editable: false },
+          { name: 'LastUpdated', value: userData.LastUpdated, editable: false }
+        ];
+      
+        console.log("Before forEach loop");
+        
+        dataArr.forEach((data) => {
+          const p = document.createElement('p');
+          p.textContent = data.name + ': ';
+          const span = document.createElement('span');
+      
+          if (data.value !== null) {
+            span.textContent = data.value;
+          } else {
+            span.textContent = '';
           }
-          
-          // Add click event listener to edit buttons
-          $('.edit-btn').on('click', function() {
-            // Get the row element of the clicked edit button
-            var row = $(this).closest('tr');
-            
-            // Get the value of the name and value cells of the row
-            var name = row.find('td:nth-child(1)').text();
-            var value = row.find('td:nth-child(2)').text();
-            
-            // Replace the value cell with an input element
-            var input = $('<input>').val(value);
-            var valueCell = $('<td>').append(input);
-            row.find('td:nth-child(2)').replaceWith(valueCell);
-            
-            // Replace the edit button with a save button
-            var saveBtn = $('<button>').text('Save').addClass('save-btn');
-            row.find('.edit-btn').replaceWith(saveBtn);
-          });
-          
-          // Add click event listener to save buttons
-          // Add click event listener to save buttons
-          profileContainer.addEventListener('click', function(event) {
-            if (event.target && event.target.matches('.save-btn')) {
-              // Get the row element of the clicked save button
-              var row = $(event.target).closest('tr');
-              
-              // Get the value of the input element in the row
-              var value = row.find('input').val();
-              
-              // Replace the input element with a text element
-              var valueCell = $('<td>').text(value);
-              row.find('td:nth-child(2)').replaceWith(valueCell);
-              
-              // Replace the save button with an edit button
-              var editBtn = $('<button>').text('Edit').addClass('edit-btn');
-              row.find('.save-btn').replaceWith(editBtn);
+      
+          if (data.editable) {
+            span.contentEditable = true;
+          }
+          span.setAttribute('data-field-name', data.name); // Add a data attribute to the span element to indicate the field name
+          p.appendChild(span);
+          profileContainer.appendChild(p);
+        });
+
+        console.log("After forEach loop");
+      
+        const form = document.getElementById('profile-form');
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const newData = {};
+
+          dataArr.forEach((data) => {
+            const span = profileContainer.querySelector(`span[data-field-name="${data.name}"]`);
+
+            if (span) {
+              newData[data.name] = span.textContent.trim();
             }
           });
-
-        }
-          </script>
+           
+      
+          newData.Id = userData.Id; // add the user ID to the newData object
           
+          console.log(newData);
 
+          fetch("http://172.127.98.121:10000/updateprofile", {
+            method: 'POST',
+            //headers: {
+            //  'Content-Type': 'application/json'
+            //},
+            body: JSON.stringify(newData)
+            })
+
+            .then((response) => {
+              if (response.ok) {
+                alert('Changes saved successfully.');
+              } else {
+                throw new Error('Failed to save changes.');
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+              alert('An error occurred while saving changes.');
+            });
+          });
+      }
+  </script>
+    
     </body>
     </html>

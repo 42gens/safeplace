@@ -17,7 +17,7 @@ loginForm.addEventListener('submit', (event) => {
 	const email = loginForm.elements['email-login'].value;
 	const password = loginForm.elements['password'].value;
 	const data = { email, password };
-	const url = 'http://172.127.98.121:10000/login';
+	const url = 'https://safe-watcher.com:10000/login';
 	fetch(url, {
 		method: 'POST',
 		body: JSON.stringify(data)
@@ -29,11 +29,15 @@ loginForm.addEventListener('submit', (event) => {
 			// login success
 			if (data.UserType === 'client') {
 				// store the returned data in the userData variable
+				const id=data.Id;
 				let userData = data;
-				// save the data to the local storage
+				userData.id = id;
+				// save the data to the local storage with
 				localStorage.setItem('userData', JSON.stringify(userData));
+
 				// redirect to the client_v1.html page
-				window.location.href = 'client_v1.html';
+				//window.location.href = 'client_v1.html';
+				window.location.href = 'client_v1.html?id=' + id;
 			} else {
 				window.location.href = 'index.html';
 			}

@@ -29,7 +29,7 @@ registerForm.addEventListener('submit', (event) => {
 		return;
 	}
 	const data = { firstname, lastname, userType, city, state, email, cell, password };
-	const url = 'http://172.127.98.121:10000/register';
+	const url = 'https://safe-watcher.com:10000/register';
 	fetch(url, {
 		method: 'POST',
 		//headers: {

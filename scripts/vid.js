@@ -41,7 +41,7 @@ console.log(metadata);
 
 // Create a function to start streaming video to a remote server
 function startStreaming() {
-  const ws = new WebSocket('wss://safe-watcher.com:1935/live'); // replace with your nginx server URL
+  const ws = new WebSocket('wss://safe-watcher.com:21935/live'); // replace with your nginx server URL
   ws.binaryType = 'blob';
   ws.onopen = () => {
     console.log('1 - ct - WebSocket connection established.');
@@ -175,7 +175,7 @@ stop.addEventListener('click', (ev) => {
   
   
   formData.append('video', videoBlob, 'filename');
-  fetch('https://safe-watcher.com:1935/live/', {
+  fetch('https://safe-watcher.com:21935/live/', {
     method: 'POST',
     body: formData
   })

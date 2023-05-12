@@ -88,33 +88,31 @@ function getUserMedia() {
 
 let mediaRecorder;
 let chunks = [];
+let mediaStreamObj;
 
 navigator.mediaDevices
   .getUserMedia(constraintObj)
   .then(function (stream) {
-    //connect the media stream to the first video element
     let video = document.querySelector("video");
     if ("srcObject" in video) {
       video.srcObject = stream;
     } else {
-      //old version
       video.src = window.URL.createObjectURL(stream);
     }
 
-    let mediaStreamObj = stream;
+    mediaStreamObj = stream;
 
     video.onloadedmetadata = function (ev) {
-      //show in the video element what is being captured by the webcam
       video.play();
     };
 
+    mediaRecorder = new MediaRecorder(mediaStreamObj);
     mediaRecorder.ondataavailable = function (ev) {
       chunks.push(ev.data);
     };
   })
   .catch(function (err) {
     console.log("An error occurred: " + err.name);
-    // Show an alert to the user
     alert(
       "An error occurred while trying to access your camera and microphone: " +
         err.name +
@@ -126,10 +124,6 @@ navigator.mediaDevices
 let start = document.getElementById("btnStart");
 let stop = document.getElementById("btnStop");
 let vidSave = document.getElementById("vid2");
-
-mediaRecorder.ondataavailable = function (ev) {
-  chunks.push(ev.data);
-};
 
 start.addEventListener("click", (ev) => {
   mediaRecorder.start();
@@ -178,7 +172,7 @@ stop.addEventListener("click", (ev) => {
     body: formData,
   }).then((response) => {
     console.log("Video uploaded successfully.");
-    console.log("The values in formData 1", formData); //Remove befor PROD
+    console.log("The values in formData 1", formData); //Remove before PROD
     console.log("response 1", response); //Remove before PROD
 
     // Send metadata to server when video stops
@@ -190,72 +184,82 @@ stop.addEventListener("click", (ev) => {
       uploadlocation: `${idv}_${Date.now()}.mp4`,
       id: idv,
     };
-    console.log("The values in metada 2", metadata);
+    console.log("The values in metadata 2", metadata);
 
     fetch("https://safe-watcher.com:10000/video-metadata", {
       method: "POST",
       body: JSON.stringify(metadata),
-      //headers: {
-      //  'Content-Type': 'application/json'
-      //}
-    }).then((response) => {
-      console.log("Video Stop - Metadata 2 uploaded successfully.");
-      console.log("response 2", response); //Remove before PROD
-    });
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log("Video Stop - Metadata 2 uploaded successfully.");
+        console.log("response 2", response);
+      })
+      .catch((error) => {
+        console.log("Error uploading metadata:", error);
+      });
   });
 
-  chunks = [];
-});
+  mediaRecorder.onstop = (ev) => {
+    // create a Blob from the video chunks
+    let videoBlob = new Blob(chunks, { type: "video/mp4;" });
+    let blob = new Blob(chunks, { type: "video/mp4;" });
 
-mediaRecorder.onstop = (ev) => {
-  // create a Blob from the video chunks
-  let videoBlob = new Blob(chunks, { type: "video/mp4;" });
-  let blob = new Blob(chunks, { type: "video/mp4;" });
+    // generate a video URL for local playback
+    let videoURL = window.URL.createObjectURL(blob);
+    vidSave.src = videoURL;
 
-  // generate a video URL for local playback
-  let videoURL = window.URL.createObjectURL(blob);
-  vidSave.src = videoURL;
+    // generate filename using id and timestamp
+    const timestamp = Date.now();
+    const filename = `${idv}_${timestamp}.mp4`;
 
-  // generate filename using id and timestamp
-  const timestamp = Date.now();
-  const filename = `${idv}_${timestamp}.mp4`;
+    // create a new FormData instance
+    const formData = new FormData();
 
-  // create a new FormData instance
-  const formData = new FormData();
+    // append the video blob and filename to the form
+    formData.append("video", videoBlob, filename);
 
-  // append the video blob and filename to the form
-  formData.append("video", videoBlob, filename);
+    // send the video file to the server
+    fetch("https://safe-watcher.com:21935/live/", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        console.log("Video uploaded successfully.");
+      })
+      .catch((error) => {
+        console.log("Error uploading video:", error);
+      });
 
-  // send the video file to the server
-  fetch("https://safe-watcher.com:21935/live/", {
-    method: "POST",
-    body: formData,
-  }).then((response) => {
-    console.log("Video uploaded successfully.");
-  });
+    // send metadata with video end event
+    const metadata = {
+      timeStamp: timestamp,
+      longitude: localStorage.getItem("longitude"),
+      latitude: localStorage.getItem("latitude"),
+      eventType: "vidend",
+      uploadLocation: `/usr/local/nginx/ct-vids/${filename}`,
+      id: idv,
+    };
 
-  // send metadata with video end event
-  const metadata = {
-    timeStamp: timestamp,
-    longitude: localStorage.getItem("longitude"),
-    latitude: localStorage.getItem("latitude"),
-    eventType: "vidend",
-    uploadLocation: `/usr/local/nginx/ct-vids/${filename}`,
-    id: idv,
+    console.log("Sending metadata with video and event type", metadata);
+
+    fetch("https://safe-watcher.com:10000/video-metadata", {
+      method: "POST",
+      body: JSON.stringify(metadata),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log("Metadata 3 uploaded successfully.");
+      })
+      .catch((error) => {
+        console.log("Error uploading metadata:", error);
+      });
+
+    // clear the video chunks for the next recording
+    chunks = [];
   };
-
-  console.log("Sending metadata with video and event type", metadata);
-
-  fetch("https://safe-watcher.com:10000/video-metadata", {
-    method: "POST",
-    body: JSON.stringify(metadata),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((response) => {
-    console.log("Metadata 3 uploaded successfully.");
-  });
-
-  // clear the video chunks for the next recording
-  chunks = [];
-};
+});
